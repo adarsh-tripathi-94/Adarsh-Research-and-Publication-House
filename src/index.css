@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-dark: #001F3F;
+  --color-brand-light: #FFFFFF;
+  --color-accent-blue: #0074D9;
+  --color-accent-teal: #39CCCC;
+  --color-accent-orange: #FF851B;
+  --color-accent-purple: #B10DC9;
+  --color-accent-pink: #FF2D55;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-dark text-brand-light font-sans antialiased;
+  }
+}
+
+@utility glass-card {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-2xl transition-all duration-500;
+}
+
+@utility vibrant-gradient {
+  @apply bg-gradient-to-br from-accent-pink via-accent-purple to-accent-blue;
+}
+
+@utility card-3d {
+  @apply transition-all duration-500 hover:[transform:perspective(1000px)_rotateX(5deg)_rotateY(5deg)_translateZ(20px)] hover:shadow-[0_20px_50px_rgba(255,45,85,0.3)];
+}
+
+@utility btn-primary {
+  @apply vibrant-gradient text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent-pink/20;
+}
+
+@utility btn-secondary {
+  @apply border-2 border-accent-teal/50 text-accent-teal px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-accent-teal hover:text-brand-dark hover:border-accent-teal transition-all;
+}
+
+.animate-glow {
+  animation: glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from { box-shadow: 0 0 10px -5px rgba(57, 204, 204, 0.5); }
+  to { box-shadow: 0 0 20px 5px rgba(57, 204, 204, 0.3); }
+}

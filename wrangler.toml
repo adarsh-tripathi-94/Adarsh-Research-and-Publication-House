@@ -1,0 +1,10 @@
+name = "adarsh-publication-web"
+compatibility_date = "2024-03-01"
+
+[assets]
+directory = "./dist"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "adarsh_db"
+database_id = "3858796b-3e95-4846-862a-e183e6ea70f3"
