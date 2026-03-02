@@ -1,8 +1,7 @@
 name = "adarsh-publication-web"
 compatibility_date = "2024-03-01"
 
-[assets]
-directory = "./dist"
+pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "DB"
