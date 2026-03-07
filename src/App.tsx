@@ -13,7 +13,7 @@ import logoImage from './logo.jpeg';
 
 // --- Types ---
 type Language = 'en' | 'hi';
-type View = 'home' | 'bed' | 'deled' | 'admin' | 'login' | 'cart' | 'about' | 'contact' | 'terms' | 'privacy' | 'refund';
+type View = 'home' | 'bed' | 'deled' | 'admin' | 'login' | 'cart' | 'about' | 'contact' | 'terms' | 'privacy' | 'refund' | 'cookie';
 
 // --- Components ---
 
@@ -256,6 +256,96 @@ const TermsView = () => (
       <p>Questions about the Terms and Conditions should be sent to us at:</p>
       <p className="font-bold text-white mt-2">Email: soe.bkt1980@gmail.com</p>
       <p className="font-bold text-white">Phone: +91 98765 43210</p>
+    </div>
+  </div>
+);
+
+const AboutView = () => (
+  <div className="max-w-4xl mx-auto py-12 px-4 text-white/80 leading-relaxed">
+    <div className="glass-card p-8 md:p-12">
+      <h1 className="text-3xl font-black mb-6 text-white uppercase">About Adarsh Publication</h1>
+      
+      <p className="mb-6 text-lg">
+        Welcome to <strong className="text-pink-500">Adarsh Research and Publication House</strong>, a premier educational publishing platform dedicated to shaping the future of teachers across India.
+      </p>
+
+      <h2 className="text-xl font-bold text-accent-teal mt-8 mb-4">Our Mission</h2>
+      <p className="mb-6">
+        Our mission is to provide high-quality, comprehensive, and accessible academic resources for B.Ed and D.El.Ed students. We believe that well-equipped teachers are the foundation of a strong educational system, and we strive to create materials that make complex concepts easy to understand and apply.
+      </p>
+
+      <h2 className="text-xl font-bold text-accent-teal mt-8 mb-4">What We Offer</h2>
+      <ul className="list-disc pl-5 space-y-2 mb-6">
+        <li><strong>Expert-Authored Content:</strong> Books written and reviewed by experienced educators and academic directors.</li>
+        <li><strong>Comprehensive Coverage:</strong> Theory and practical books covering all semesters of B.Ed and D.El.Ed curriculums.</li>
+        <li><strong>Practical Resources:</strong> Specialized manuals for micro-teaching, lesson planning, and action research.</li>
+      </ul>
+
+      <h2 className="text-xl font-bold text-accent-teal mt-8 mb-4">Our Leadership</h2>
+      <p>
+        Guided by the visionary leadership of our Chief Editor, Dr. Brijesh Kumar Tiwari, and our dedicated Directors, we continuously research and update our publications to align with the latest educational standards and pedagogical advancements.
+      </p>
+    </div>
+  </div>
+);
+
+const ContactView = () => (
+  <div className="max-w-4xl mx-auto py-12 px-4 text-white/80 leading-relaxed">
+    <div className="glass-card p-8 md:p-12">
+      <h1 className="text-3xl font-black mb-6 text-white uppercase">Contact Us</h1>
+      
+      <p className="mb-8">We are here to help! Whether you have a question about a book, need help with an order, or want to request a manual cancellation, please reach out to us using the details below.</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
+          <Phone className="text-pink-500 mb-4" size={32} />
+          <h3 className="text-lg font-bold text-white mb-2">Call Us</h3>
+          <p className="font-mono text-xl">+91 98765 43210</p>
+          <p className="text-xs text-white/50 mt-2">Mon - Sat, 10:00 AM - 6:00 PM</p>
+        </div>
+
+        <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
+          <Mail className="text-accent-teal mb-4" size={32} />
+          <h3 className="text-lg font-bold text-white mb-2">Email Us</h3>
+          <p className="font-mono">soe.bkt1980@gmail.com</p>
+          <p className="text-xs text-white/50 mt-2">We reply within 24 hours</p>
+        </div>
+      </div>
+
+      <div className="bg-pink-500/10 border border-pink-500/30 p-6 rounded-2xl">
+        <h3 className="text-lg font-bold text-pink-500 mb-2 flex items-center">
+          <ShoppingCart className="mr-2" size={20} /> Need to Cancel an Order?
+        </h3>
+        <p className="text-sm">Because we process orders quickly, we do not have an automated cancellation button. If you placed an order by mistake, please <strong>call us immediately</strong> or send an email with your <strong>Order ID</strong>. Orders can only be cancelled before they are dispatched.</p>
+      </div>
+    </div>
+  </div>
+);
+
+const CookieView = () => (
+  <div className="max-w-4xl mx-auto py-12 px-4 text-white/80 leading-relaxed">
+    <div className="glass-card p-8 md:p-12">
+      <h1 className="text-3xl font-black mb-2 text-white uppercase">Cookie Policy</h1>
+      <p className="text-sm text-pink-500 font-bold mb-8">Last Updated: 04/03/2026</p>
+
+      <p className="mb-6">This Cookie Policy explains how Adarsh Research and Publication House uses cookies and similar technologies to recognize you when you visit our website. It explains what these technologies are and why we use them, as well as your rights to control our use of them.</p>
+
+      <h2 className="text-xl font-bold text-accent-teal mt-8 mb-4">1. What are cookies?</h2>
+      <p className="mb-6">Cookies are small data files that are placed on your computer or mobile device when you visit a website. They are widely used by website owners to make their websites work, or to work more efficiently, as well as to provide reporting information.</p>
+
+      <h2 className="text-xl font-bold text-accent-teal mt-8 mb-4">2. Why do we use cookies?</h2>
+      <p className="mb-4">We use first-party cookies for several reasons. Some cookies are required for technical reasons in order for our website to operate. We refer to these as "essential" or "strictly necessary" cookies. Specifically, we use them to:</p>
+      <ul className="list-disc pl-5 space-y-2 mb-6">
+        <li>Remember the items you have placed in your Shopping Cart.</li>
+        <li>Keep you logged securely into the Admin Panel.</li>
+        <li>Remember your language preference (English/Hindi).</li>
+      </ul>
+
+      <h2 className="text-xl font-bold text-accent-teal mt-8 mb-4">3. Do we use tracking or advertising cookies?</h2>
+      <p className="mb-6">Currently, we only use strictly necessary technical cookies to ensure the website functions correctly. We do not use third-party advertising cookies to track your browsing habits across other websites.</p>
+
+      <h2 className="text-xl font-bold text-accent-teal mt-8 mb-4">4. How can I control cookies?</h2>
+      <p className="mb-6">You have the right to decide whether to accept or reject cookies. You can set or amend your web browser controls to accept or refuse cookies. If you choose to reject cookies, you may still use our website, though your access to some functionality and areas of our website (like the Shopping Cart) may be restricted.</p>
     </div>
   </div>
 );
@@ -553,7 +643,8 @@ const BookCard = ({ book, onAddToCart, onOrderNow }: { book: Book, onAddToCart: 
   );
 };
 
-const Footer = () => {
+// Notice we added { setView } here!
+const Footer = ({ setView }: { setView: (v: View) => void }) => {
   return (
     <footer className="bg-brand-dark border-t border-white/10 pt-20 pb-10 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-accent-pink/30 to-transparent"></div>
@@ -580,22 +671,20 @@ const Footer = () => {
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest mb-6">Quick Links</h3>
             <ul className="space-y-4 text-sm text-white/60">
-              <li><a href="#" className="hover:text-white transition-colors">B.Ed Theory Books</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">B.Ed Practical Books</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">D.El.Ed Theory Books</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">D.El.Ed Practical Books</a></li>
+              <li><button onClick={() => setView('bed')} className="hover:text-white transition-colors">B.Ed Books</button></li>
+              <li><button onClick={() => setView('deled')} className="hover:text-white transition-colors">D.El.Ed Books</button></li>
             </ul>
           </div>
 
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest mb-6">Support</h3>
             <ul className="space-y-4 text-sm text-white/60">
-              <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Author Submission</a></li>
-              <li><a href={<PrivacyView/>} className="hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><button onClick={() => setView('about')} className="hover:text-white transition-colors text-left">About Us</button></li>
+              <li><button onClick={() => setView('contact')} className="hover:text-white transition-colors text-left">Contact Us</button></li>
+              <li><button onClick={() => setView('privacy')} className="hover:text-white transition-colors text-left">Privacy Policy</button></li>
             </ul>
           </div>
+          
 
           <div>
             <h3 className="text-sm font-bold uppercase tracking-widest mb-6">Contact</h3>
@@ -619,8 +708,8 @@ const Footer = () => {
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-white/40">
           <p>© 2026 Adarsh Research and Publication House. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href={<TermsView/>} className="hover:text-white transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+            <button onClick={() => setView('terms')} className="hover:text-white transition-colors">Terms of Service</button>
+            <button onClick={() => setView('cookie')} className="hover:text-white transition-colors">Cookie Policy</button>
           </div>
         </div>
       </div>
@@ -1491,6 +1580,34 @@ export default function App() {
             </motion.div>
           )}
         </AnimatePresence>
+        {view === 'terms' && (
+            <motion.div key="terms" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <TermsView />
+            </motion.div>
+          )}
+
+          {view === 'privacy' && (
+            <motion.div key="privacy" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <PrivacyView />
+            </motion.div>
+          )}
+          {view === 'about' && (
+            <motion.div key="about" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <AboutView />
+            </motion.div>
+          )}
+
+          {view === 'contact' && (
+            <motion.div key="contact" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <ContactView />
+            </motion.div>
+          )}
+
+          {view === 'cookie' && (
+            <motion.div key="cookie" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              <CookieView />
+            </motion.div>
+          )}
       </main>
 
       {/* --- UI Modals Overlay (Replaces the ugly window.prompt boxes) --- */}
@@ -1552,7 +1669,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <Footer />
+      <Footer setView={setView}/>
     </div>
   );
 }
