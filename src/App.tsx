@@ -13,7 +13,7 @@ import logoImage from './logo.jpeg';
 
 // --- Types ---
 type Language = 'en' | 'hi';
-type View = 'home' | 'bed' | 'deled' | 'admin' | 'login' | 'cart' | 'about' | 'contact';
+type View = 'home' | 'bed' | 'deled' | 'admin' | 'login' | 'cart' | 'about' | 'contact' | 'terms' | 'privacy' | 'refund';
 
 // --- Components ---
 
@@ -220,7 +220,103 @@ const Navbar = ({
     </nav>
   );
 };
+const TermsView = () => (<div className="max-w-4xl mx-auto py-12 px-4 text-white">TERMS AND CONDITIONS  Last Updated: 04/03/2026
 
+Welcome to Adarsh Research and Publication House. By accessing our website and purchasing our educational resources, you agree to be bound by the following Terms and Conditions. Please read them carefully.
+
+1. General Overview
+
+This website is operated by Adarsh Research and Publication House. Throughout the site, the terms "we", "us", and "our" refer to Adarsh Research and Publication House.
+
+By visiting our site or purchasing something from us, you engage in our "Service" and agree to be bound by these terms.
+
+These terms apply to all users of the site, including without limitation students, educators, authors, and casual browsers.
+
+2. Products and Pricing
+
+Product Descriptions: We make every effort to display the colors, covers, and content of our B.Ed and D.El.Ed theory and practical books as accurately as possible. However, we do not warrant that your device's display will be entirely accurate.
+
+Modifications: Prices for our books and materials are subject to change without notice. We reserve the right to modify or discontinue any product at any time.
+
+Availability: All orders are subject to product availability. We reserve the right to limit the quantities of any products or services that we offer.
+
+3. Payments and Billing
+
+Accuracy: You agree to provide current, complete, and accurate purchase and account information for all purchases made at our store.
+
+Payment Methods: We accept payments via standard digital channels including UPI, Net Banking, and Credit/Debit Cards via our secure payment gateway partners, as well as Cash on Delivery (where applicable).
+
+Transaction Reference: For manual UPI payments, users must provide a valid 12-digit UTR/Transaction ID. Orders will only be processed upon successful verification of this ID with our banking records.
+
+4. Shipping and Delivery
+
+Shipping timelines and costs will be calculated and displayed at checkout.
+
+We are not responsible for delays caused by third-party shipping carriers, natural disasters, or incorrect delivery addresses provided by the customer.
+
+5. Intellectual Property Rights
+
+All content included on this website, such as text, graphics, logos, book covers, and digital downloads, is the property of Adarsh Research and Publication House or its content suppliers and is protected by Indian copyright laws.
+
+You may not reproduce, duplicate, copy, sell, resell, or exploit any portion of our books or the Service without express written permission from us.
+
+6. Third-Party Links
+
+Certain content, products, and services available via our platform may include materials from third parties. We are not responsible for evaluating the content or accuracy of third-party websites.
+
+7. Limitation of Liability
+
+In no case shall Adarsh Research and Publication House, our directors, officers, employees, or affiliates be liable for any injury, loss, claim, or any direct, indirect, incidental, or consequential damages of any kind arising from your use of any of the service or any products procured using the service.
+
+8. Governing Law
+
+These Terms and Conditions and any separate agreements whereby we provide you Services shall be governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Jharkhand/Bihar, India.
+
+9. Contact Information
+Questions about the Terms and Conditions should be sent to us at:
+
+Email: soe.bkt1980@gmail.com
+
+Phone: +91 98765 43210
+
+Address: Jharkhand, India</div>);
+const PrivacyView = () => (<div className="max-w-4xl mx-auto py-12 px-4 text-white">PRIVACY POLICY
+Last Updated: 04/03/2026
+
+Adarsh Research and Publication House ("we," "us," or "our") respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and safeguard your information when you visit our website and purchase our educational materials.
+
+1. Information We Collect
+When you make a purchase or attempt to make a purchase through our site, we collect certain information from you, including:
+
+Personal Information: Your name, billing address, shipping address, email address, and phone number.
+
+Payment Information: For UPI/Direct payments, we may collect UTR/Transaction IDs. We do not store your sensitive credit card or net banking details on our servers; these are handled securely by our payment gateway partner (PhonePe).
+
+2. How We Use Your Information
+We use the information that we collect generally to fulfill any orders placed through the site. Specifically, we use this information to:
+
+Process your payments and arrange for shipping.
+
+Provide you with invoices and/or order confirmations.
+
+Communicate with you regarding your order status.
+
+Screen our orders for potential risk or fraud.
+
+3. Sharing Your Personal Information
+We share your Personal Information with necessary third parties strictly to help us provide our services to you. This includes:
+
+Payment Gateways: Such as PhonePe, to process your transactions securely.
+
+Delivery Partners: Courier and postal services to deliver your physical books.
+
+Legal Compliance: We may also share your Personal Information to comply with applicable Indian laws and regulations, or to respond to lawful requests for information we receive.
+
+4. Data Security
+We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+
+5. Contact Us
+For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at soe.bkt1980@gmail.com or by phone at +91 98765 43210.</div>);
 const HeroBanner = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const slides = [
@@ -521,7 +617,7 @@ const Footer = () => {
               <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Author Submission</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+              <li><a href={<PrivacyView/>} className="hover:text-white transition-colors">Privacy Policy</a></li>
             </ul>
           </div>
 
@@ -547,7 +643,7 @@ const Footer = () => {
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-white/40">
           <p>© 2026 Adarsh Research and Publication House. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+            <a href={<TermsView/>} className="hover:text-white transition-colors">Terms of Service</a>
             <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
           </div>
         </div>
@@ -1260,12 +1356,12 @@ export default function App() {
                                 >
                                         Process
                                                   </button>
-  ) : (
-    <span className="text-pink-500 font-bold flex items-center text-xs">
-      <CheckCircle2 size={14} className="mr-1" /> Processed
-    </span>
-  )}
-</td>
+                                                ) : (
+                                                      <span className="text-pink-500 font-bold flex items-center text-xs">
+                                                          <CheckCircle2 size={14} className="mr-1" /> Processed
+                                                      </span>
+                                                  )}
+                                                </td>
                                 </tr>
                               ))}
                               {orders.length === 0 && (
