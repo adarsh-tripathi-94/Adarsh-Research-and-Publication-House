@@ -1,5 +1,3 @@
-// functions/api/orders.js
-
 export async function onRequestGet(context) {
   try {
     const { results } = await context.env.DB.prepare("SELECT * FROM orders ORDER BY order_date DESC").all();
@@ -8,6 +6,7 @@ export async function onRequestGet(context) {
       customer: { name: row.customer_name, phone: row.customer_phone, email: row.customer_email, subject: row.subject_requirement, address: row.delivery_address },
       items: [{ price: row.total_amount }], 
       status: row.status,
+      utr: row.utr_number, // <--- Added UTR to the admin fetch
       date: row.order_date
     }));
     return Response.json(formattedOrders);
@@ -22,14 +21,14 @@ export async function onRequestPost(context) {
     const { customer, items, total } = payload;
     const orderId = `ORD-${Date.now()}`;
 
-    // Safely insert order with all possible optional fields handled
+    // Added status and utr_number to the database insert
     await context.env.DB.prepare(`
-      INSERT INTO orders (id, customer_name, customer_email, customer_phone, customer_whatsapp, delivery_address, landmark, district, state, pincode, payment_method, subject_requirement, total_amount)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO orders (id, customer_name, customer_email, customer_phone, customer_whatsapp, delivery_address, landmark, district, state, pincode, payment_method, subject_requirement, total_amount, status, utr_number)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)
     `).bind(
       orderId, customer.name, customer.email, customer.phone, customer.whatsapp || null, customer.address,
       customer.landmark || null, customer.district, customer.state, customer.pincode, customer.paymentMethod,
-      customer.subject || null, total
+      customer.subject || null, total, customer.utr || null
     ).run();
 
     // Insert items
@@ -41,7 +40,6 @@ export async function onRequestPost(context) {
 
     return Response.json({ success: true, orderId }, { status: 201 });
   } catch (error) {
-    // Return the EXACT database error so we can see it in the network tab if it fails again
     return Response.json({ error: error.message }, { status: 500 });
   }
 }

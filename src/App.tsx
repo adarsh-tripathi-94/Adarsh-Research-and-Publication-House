@@ -559,17 +559,9 @@ const Footer = () => {
 const CheckoutView = ({ cart, onComplete, upiId }: { cart: Book[], onComplete: (data: any) => void, upiId: string }) => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    whatsapp: '',
-    address: '',
-    landmark: '',
-    district: '',
-    state: '',
-    pincode: '',
-    paymentMethod: '',
-    subject: ''
+    name: '', email: '', phone: '', whatsapp: '', address: '', landmark: '',
+    district: '', state: '', pincode: '', paymentMethod: '', subject: '',
+    utr: '' // <--- Added UTR to state
   });
 
   const hasSpecialBooks = cart.some(item => 
@@ -585,16 +577,20 @@ const CheckoutView = ({ cart, onComplete, upiId }: { cart: Book[], onComplete: (
       setStep(2);
     } else if (step === 2) {
       if (formData.paymentMethod === 'upi') {
-        setStep(3); // Proceed to QR Code screen
+        setStep(3);
       } else {
-        onComplete(formData); // Process direct for COD/others
+        onComplete(formData);
       }
     } else {
-      onComplete(formData); // Finalize after scanning QR
+      // Validate UTR on final step
+      if (formData.paymentMethod === 'upi' && formData.utr.length !== 12) {
+        alert("Please enter a valid 12-digit UTR / Transaction ID.");
+        return;
+      }
+      onComplete(formData);
     }
   };
 
-  // Generate UPI Intent URL and QR Code link
   const upiString = `upi://pay?pa=${upiId}&pn=Adarsh%20Publication&am=${total}&cu=INR`;
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiString)}`;
 
@@ -613,6 +609,7 @@ const CheckoutView = ({ cart, onComplete, upiId }: { cart: Book[], onComplete: (
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+          {/* Order Summary Column */}
           <div>
             <h3 className="text-lg md:text-xl font-bold mb-6 text-accent-teal">Order Summary</h3>
             <div className="space-y-4 mb-8 max-h-[250px] md:max-h-[300px] overflow-y-auto pr-4">
@@ -633,16 +630,13 @@ const CheckoutView = ({ cart, onComplete, upiId }: { cart: Book[], onComplete: (
             </div>
             <div className="p-4 md:p-6 bg-white/5 rounded-2xl">
               <div className="flex justify-between mb-2 text-white/60 text-sm md:text-base">
-                <span>Subtotal</span>
-                <span>₹{total}</span>
+                <span>Subtotal</span><span>₹{total}</span>
               </div>
               <div className="flex justify-between mb-4 text-white/60 text-sm md:text-base">
-                <span>Shipping</span>
-                <span className="text-accent-teal">FREE</span>
+                <span>Shipping</span><span className="text-accent-teal">FREE</span>
               </div>
               <div className="flex justify-between text-lg md:text-xl font-black border-t border-white/10 pt-4">
-                <span>Total</span>
-                <span className="text-accent-orange">₹{total}</span>
+                <span>Total</span><span className="text-accent-orange">₹{total}</span>
               </div>
             </div>
           </div>
@@ -679,8 +673,6 @@ const CheckoutView = ({ cart, onComplete, upiId }: { cart: Book[], onComplete: (
                 <div className="grid grid-cols-2 gap-4">
                   {[
                     { id: 'upi', name: 'UPI / PhonePe', icon: '📱' },
-                    { id: 'card', name: 'Credit/Debit Card', icon: '💳' },
-                    { id: 'net', name: 'Net Banking', icon: '🏦' },
                     { id: 'cod', name: 'Cash on Delivery', icon: '🚚' }
                   ].map(method => (
                     <button key={method.id} type="button" onClick={() => setFormData({...formData, paymentMethod: method.id})} className={`p-6 rounded-2xl border-2 transition-all flex flex-col items-center justify-center space-y-2 ${formData.paymentMethod === method.id ? 'border-accent-teal bg-accent-teal/10' : 'border-white/10 hover:border-white/30'}`}>
@@ -700,12 +692,29 @@ const CheckoutView = ({ cart, onComplete, upiId }: { cart: Book[], onComplete: (
               <div className="text-center animate-in fade-in zoom-in duration-500">
                 <h3 className="text-2xl font-black mb-2 text-accent-teal">Scan to Pay ₹{total}</h3>
                 <p className="text-sm text-white/60 mb-8">Open any UPI app (GPay, PhonePe, Paytm) to scan this code.</p>
+                
                 <div className="w-64 h-64 mx-auto bg-white p-4 rounded-3xl mb-8 shadow-2xl shadow-accent-teal/20">
                   <img src={qrUrl} alt="UPI Payment QR Code" className="w-full h-full object-contain" />
                 </div>
                 <p className="text-xs text-white/40 mb-8 font-mono">Paying to UPI ID: {upiId || 'Not Configured'}</p>
+                
+                {/* --- THE NEW UTR INPUT FIELD --- */}
+                <div className="mb-8 text-left">
+                  <label className="block text-sm font-bold text-white/60 uppercase tracking-widest mb-2">Enter 12-Digit UTR / Ref. Number</label>
+                  <input 
+                    type="text" 
+                    required 
+                    maxLength={12}
+                    value={formData.utr}
+                    onChange={(e) => setFormData({...formData, utr: e.target.value.replace(/\D/g, '')})}
+                    className="w-full bg-white/5 border border-pink-500 rounded-xl px-4 py-4 outline-none focus:border-white transition-colors text-center text-xl tracking-widest font-mono text-white"
+                    placeholder="e.g. 312456789012"
+                  />
+                  <p className="text-[10px] text-white/40 mt-2 text-center">Found in your UPI app's payment history.</p>
+                </div>
+
                 <button type="submit" className="btn-primary w-full py-5 text-lg shadow-lg shadow-pink-500/50 flex items-center justify-center">
-                  <CheckCircle2 className="mr-2" /> I HAVE COMPLETED THE PAYMENT
+                  <CheckCircle2 className="mr-2" /> VERIFY PAYMENT & PLACE ORDER
                 </button>
               </div>
             )}
@@ -715,7 +724,6 @@ const CheckoutView = ({ cart, onComplete, upiId }: { cart: Book[], onComplete: (
     </div>
   );
 };
-
 // --- Main App ---
 
 export default function App() {
@@ -1234,7 +1242,16 @@ export default function App() {
                                   </td>
                                   <td className="py-6">{order.items.length} Books</td>
                                   <td className="py-6 text-pink-500 font-bold">{order.customer.subject || 'N/A'}</td>
-                                  <td className="py-6 font-bold">₹{order.items.reduce((sum: number, item: any) => sum + item.price, 0)}</td>
+                                  <td className="py-6 font-bold">
+                                      ₹{order.items.reduce((sum: number, item: any) => sum + item.price, 0)}
+                                      {order.utr && (
+                                        <div className="mt-1">
+                                          <span className="text-[10px] bg-accent-teal/20 text-accent-teal px-2 py-1 rounded font-mono tracking-widest">
+                                            UTR: {order.utr}
+                                          </span>
+                                        </div>
+                                      )}
+                                    </td>
                                   <td className="py-6">
                                         {order.status === 'Pending' ? (
                                       <button 
