@@ -5,16 +5,17 @@ export async function onRequestPut(context) {
     const bookId = context.params.id;
     const data = await context.request.json();
     
-    // Update the specific book in the D1 database
+    // 🔴 THE FIX: Notice we added "year = ?" below
     const result = await context.env.DB.prepare(`
       UPDATE books 
-      SET title = ?, price = ?, image_url = ?
+      SET title = ?, price = ?, image_url = ?, year = ?
       WHERE id = ?
     `).bind(
       data.title, 
       data.price, 
       data.image || null,
-      bookId
+      data.year, // This now matches the 4th question mark
+      bookId     // This matches the 5th question mark
     ).run();
 
     if (result.meta.changes === 0) {

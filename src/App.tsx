@@ -887,6 +887,8 @@ const CheckoutView = ({ cart, onComplete, upiId }: { cart: Book[], onComplete: (
 };
 // --- Main App ---
 
+// --- Main App ---
+
 export default function App() {
   const [view, setView] = useState<View>('home');
   const [lang, setLang] = useState<Language>('hi');
@@ -896,19 +898,15 @@ export default function App() {
   const [bedSubView, setBedSubView] = useState<'theory' | 'practical' | null>(null);
   const [deledSubView, setDeledSubView] = useState<'theory' | 'practical' | null>(null);
   
-  // Admin Tabs includes 'settings' now
   const [adminTab, setAdminTab] = useState<'orders' | 'books' | 'governing' | 'settings'>('orders');
 
-  // App Data State
   const [allBooks, setAllBooks] = useState<Book[]>([]);
-  const [upiId, setUpiId] = useState<string>(''); // Store UPI ID
+  const [upiId, setUpiId] = useState<string>(''); 
   const [isLoading, setIsLoading] = useState(true);
 
-  // Modal States for UI Replacement of prompt()
-  const [bookModal, setBookModal] = useState({ isOpen: false, mode: 'add', data: { id: '', title: '', price: 180, category: 'B.Ed', type: 'Theory', image: '' } });
+  const [bookModal, setBookModal] = useState({ isOpen: false, mode: 'add', data: { id: '', title: '', price: 180, category: 'B.Ed', type: 'Theory', image: '', year: 'प्रथम सेमेस्टर' } });
   const [memberModal, setMemberModal] = useState({ isOpen: false, data: { name: '', role: 'Director', bio: '', img: '' } });
 
-  // Fetch initial Database data (Books + Settings)
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -932,7 +930,6 @@ export default function App() {
     fetchInitialData();
   }, []);
 
-  // Fetch Orders from Cloudflare API when Admin logs in
   useEffect(() => {
     if (user?.role === 'admin') {
       const fetchOrders = async () => {
@@ -948,14 +945,14 @@ export default function App() {
       };
       fetchOrders();
     }
-  }, [user, view]); // Re-run when view changes (e.g. going back to admin panel)
+  }, [user, view]);
 
-  // Dynamically filter books for UI
   const bedTheoryBooks = allBooks.filter(b => b.category === 'B.Ed' && b.type === 'Theory');
   const bedPracticalBooks = allBooks.filter(b => b.category === 'B.Ed' && b.type === 'Practical');
   const deledTheoryBooks = allBooks.filter(b => b.category === 'D.El.Ed' && b.type === 'Theory');
   const deledPracticalBooks = allBooks.filter(b => b.category === 'D.El.Ed' && b.type === 'Practical');
   
+  // FIXED: This was accidentally deleted in the previous step!
   const [governingMembers, setGoverningMembers] = useState<any[]>([
     { 
       name: 'Dr. Brijesh Kumar Tiwari', 
@@ -980,13 +977,28 @@ export default function App() {
     },
   ]);
 
-  // Modals Actions (Replaces Prompts)
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBookModal(prev => ({
+          ...prev,
+          data: { ...prev.data, image: reader.result as string }
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const openAddBookModal = (category: string, type: string) => {
-    setBookModal({ isOpen: true, mode: 'add', data: { id: '', title: '', price: 180, category, type, image: '' } });
+    const defaultYear = category === 'B.Ed' ? 'प्रथम सेमेस्टर' : 'प्रथम वर्ष';
+    setBookModal({ isOpen: true, mode: 'add', data: { id: '', title: '', price: 180, category, type, image: '', year: defaultYear } });
   };
 
   const openEditBookModal = (book: Book) => {
-    setBookModal({ isOpen: true, mode: 'edit', data: { id: book.id, title: book.title, price: book.price, category: book.category, type: book.type, image: book.image || '' } });
+    const defaultYear = book.category === 'B.Ed' ? 'प्रथम सेमेस्टर' : 'प्रथम वर्ष';
+    setBookModal({ isOpen: true, mode: 'edit', data: { id: book.id, title: book.title, price: book.price, category: book.category, type: book.type, image: book.image || '', year: book.year || defaultYear } });
   };
 
   const handleSaveBook = async () => {
@@ -1000,7 +1012,7 @@ export default function App() {
         type: data.type,
         price: data.price,
         image: data.image || undefined,
-        year: data.category === 'D.El.Ed' ? 'प्रथम वर्ष' : 'प्रथम सेमेस्टर'
+        year: data.year 
       };
 
       try {
@@ -1018,7 +1030,7 @@ export default function App() {
         console.error("Error adding book", error);
       }
     } else {
-      const updatePayload = { title: data.title, price: data.price, image: data.image || undefined };
+      const updatePayload = { title: data.title, price: data.price, image: data.image || undefined, year: data.year };
       try {
         const response = await fetch(`/api/books/${data.id}`, {
           method: 'PUT',
@@ -1031,7 +1043,7 @@ export default function App() {
         }
       } catch (error) { console.error("Error updating book:", error); }
     }
-    setBookModal({ ...bookModal, isOpen: false }); // Close modal
+    setBookModal({ ...bookModal, isOpen: false }); 
   };
 
   const handleRemoveBook = async (id: string) => {
@@ -1044,7 +1056,6 @@ export default function App() {
     } catch (error) { console.error("Error deleting book:", error); }
   };
 
-  // UI Modal approach to adding members
   const openAddMemberModal = () => {
     setMemberModal({ isOpen: true, data: { name: '', role: 'Director', bio: '', img: '' } });
   };
@@ -1061,9 +1072,8 @@ export default function App() {
       color: 'from-pink-500 to-purple-500'
     };
     
-    // Spread operator ensures immediate re-rendering
     setGoverningMembers(prevMembers => [...prevMembers, newMember]);
-    setMemberModal({ ...memberModal, isOpen: false }); // Close modal
+    setMemberModal({ ...memberModal, isOpen: false }); 
   };
 
   const handleRemoveMember = (name: string) => {
@@ -1097,6 +1107,7 @@ export default function App() {
       alert('Failed to connect to the server.');
     }
   };
+
   const handleProcessOrder = async (orderId: string) => {
     try {
       const response = await fetch(`/api/orders/${orderId}`, {
@@ -1104,7 +1115,6 @@ export default function App() {
       });
 
       if (response.ok) {
-        // Update the local state so the UI reflects the change instantly
         setOrders(prevOrders => 
           prevOrders.map(o => o.id === orderId ? { ...o, status: 'Processed' } : o)
         );
@@ -1116,6 +1126,7 @@ export default function App() {
       console.error("Error processing order:", error);
     }
   };
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     const email = (e.target as any).email.value;
@@ -1140,7 +1151,6 @@ export default function App() {
         cartCount={cart.length}
       />
 
-      {/* Reduced distance from Top to main content container  */}
       <main className="flex-grow pt-40 md:pt-48">
         {view !== 'admin' && view !== 'login' && (
           <QuickNav setView={setView} setBedSubView={setBedSubView} setDeledSubView={setDeledSubView} />
@@ -1205,7 +1215,7 @@ export default function App() {
                           <div key={sem}>
                             <h3 className="text-2xl font-bold mb-6 border-b border-white/10 pb-2">{sem}</h3>
                             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                              {bedTheoryBooks.filter(b => b.semester === sem).map(book => (
+                              {bedTheoryBooks.filter(b => b.year === sem).map(book => (
                                 <BookCard key={book.id} book={book} onAddToCart={addToCart} onOrderNow={orderNow} />
                               ))}
                             </div>
@@ -1455,7 +1465,6 @@ export default function App() {
                         </div>
 
                         <div className="space-y-8">
-                          {/* Rendering the Book lists UI. Since it repeats, we use mapping over the arrays as you defined */}
                           <div>
                             <h4 className="text-lg font-bold mb-4 text-pink-500">B.Ed Theory Books</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1579,8 +1588,8 @@ export default function App() {
               )}
             </motion.div>
           )}
-        </AnimatePresence>
-        {view === 'terms' && (
+
+          {view === 'terms' && (
             <motion.div key="terms" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <TermsView />
             </motion.div>
@@ -1608,27 +1617,66 @@ export default function App() {
               <CookieView />
             </motion.div>
           )}
+        </AnimatePresence>
+
       </main>
 
-      {/* --- UI Modals Overlay (Replaces the ugly window.prompt boxes) --- */}
+      {/* --- UI Modals Overlay --- */}
       <AnimatePresence>
         {bookModal.isOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }} className="glass-card p-8 w-full max-w-md bg-brand-dark border-white/20 shadow-2xl">
               <h2 className="text-2xl font-black mb-6 text-accent-teal uppercase tracking-tight">{bookModal.mode === 'add' ? 'Add New Book' : 'Edit Book Details'}</h2>
               <div className="space-y-4">
+                
                 <div>
                   <label className="block text-xs font-bold text-white/60 uppercase tracking-widest mb-1">Title</label>
                   <input type="text" value={bookModal.data.title} onChange={e => setBookModal({...bookModal, data: {...bookModal.data, title: e.target.value}})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-accent-teal text-sm font-bold" placeholder="Enter Book Title"/>
                 </div>
+
                 <div>
                   <label className="block text-xs font-bold text-white/60 uppercase tracking-widest mb-1">Price (₹)</label>
                   <input type="number" value={bookModal.data.price} onChange={e => setBookModal({...bookModal, data: {...bookModal.data, price: Number(e.target.value)}})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-accent-teal text-sm font-bold" />
                 </div>
+
                 <div>
-                  <label className="block text-xs font-bold text-white/60 uppercase tracking-widest mb-1">Image URL (Optional)</label>
-                  <input type="text" value={bookModal.data.image || ''} onChange={e => setBookModal({...bookModal, data: {...bookModal.data, image: e.target.value}})} className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-accent-teal text-sm font-mono text-white/50" placeholder="https://..." />
+                  <label className="block text-xs font-bold text-white/60 uppercase tracking-widest mb-1">
+                    {bookModal.data.category === 'B.Ed' ? 'Semester' : 'Year'}
+                  </label>
+                  <select 
+                    value={bookModal.data.year} 
+                    onChange={e => setBookModal({...bookModal, data: {...bookModal.data, year: e.target.value}})}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-accent-teal text-sm font-bold text-white appearance-none"
+                  >
+                    {bookModal.data.category === 'B.Ed' ? (
+                      <>
+                        <option value="प्रथम सेमेस्टर" className="bg-brand-dark">प्रथम सेमेस्टर</option>
+                        <option value="द्वितीय सेमेस्टर" className="bg-brand-dark">द्वितीय सेमेस्टर</option>
+                        <option value="तृतीय सेमेस्टर" className="bg-brand-dark">तृतीय सेमेस्टर</option>
+                        <option value="चतुर्थ सेमेस्टर" className="bg-brand-dark">चतुर्थ सेमेस्टर</option>
+                      </>
+                    ) : (
+                      <>
+                        <option value="प्रथम वर्ष" className="bg-brand-dark">प्रथम वर्ष</option>
+                        <option value="द्वितीय वर्ष" className="bg-brand-dark">द्वितीय वर्ष</option>
+                      </>
+                    )}
+                  </select>
                 </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-white/60 uppercase tracking-widest mb-1">Book Cover Image (Optional)</label>
+                  <input 
+                    type="file" 
+                    accept="image/png, image/jpeg"
+                    onChange={handleImageUpload}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 outline-none focus:border-accent-teal text-sm text-white/50 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-pink-500 file:text-white hover:file:bg-pink-600 transition-colors" 
+                  />
+                  {bookModal.data.image && bookModal.data.image.startsWith('data:image') && (
+                    <p className="mt-2 text-xs text-accent-teal font-bold">✓ Image attached successfully</p>
+                  )}
+                </div>
+
               </div>
               <div className="flex space-x-4 mt-8">
                 <button onClick={() => setBookModal({...bookModal, isOpen: false})} className="btn-secondary flex-1 py-3 text-sm">Cancel</button>
@@ -1637,7 +1685,6 @@ export default function App() {
             </motion.div>
           </motion.div>
         )}
-
         {memberModal.isOpen && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
             <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} exit={{ scale: 0.9 }} className="glass-card p-8 w-full max-w-md bg-brand-dark border-white/20 shadow-2xl">
