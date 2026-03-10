@@ -907,6 +907,7 @@ export default function App() {
   const [bookModal, setBookModal] = useState({ isOpen: false, mode: 'add', data: { id: '', title: '', price: 180, category: 'B.Ed', type: 'Theory', image: '', year: 'प्रथम सेमेस्टर' } });
   const [memberModal, setMemberModal] = useState({ isOpen: false, data: { name: '', role: 'Director', bio: '', img: '' } });
 
+  // Fetch initial Database data (Books + Settings)
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
@@ -915,7 +916,15 @@ export default function App() {
           fetch('/api/settings').catch(() => null)
         ]);
         
-        if (booksRes && booksRes.ok) setAllBooks(await booksRes.json());
+        if (booksRes && booksRes.ok) {
+          const data = await booksRes.json();
+          // THE FIX: Map the database 'image_url' so the frontend recognizes it as 'image'
+          const formattedBooks = data.map((b: any) => ({
+            ...b,
+            image: b.image_url || b.image
+          }));
+          setAllBooks(formattedBooks);
+        }
         
         if (settingsRes && settingsRes.ok) {
           const settingsData = await settingsRes.json();
